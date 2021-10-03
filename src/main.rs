@@ -25,7 +25,7 @@ async fn get_person<'method>() -> person::Person<'method> {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 
-    // let connection = db::establish_connection();
+    let connection = db::establish_connection();
 
     HttpServer::new(|| { 
         App::new().service(index).service(get_person)
