@@ -25,7 +25,11 @@ async fn get_person<'method>() -> person::Person<'method> {
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
 
-    let connection = db::establish_connection("localhost", 3306, "", "read-user", "password123");
+    // connection to database established
+    let connection = match db::establish_connection("localhost", 3306, "", "read-user", "password123") {
+        Ok(conn) => conn,
+        Err(err) => panic!("{}", err.to_string())
+    };
 
     HttpServer::new(|| { 
         App::new().service(index).service(get_person)
