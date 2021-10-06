@@ -1,5 +1,7 @@
 use std::{future::{Ready, ready}};
 
+use diesel::Queryable;
+
 use actix_web::{Error, HttpResponse, Responder};
 use serde::Serialize;
 
@@ -7,17 +9,17 @@ use serde::Serialize;
 /**
  * contains person data and is serializable using serde
  */
-#[derive(Serialize)]
-pub struct Person<'this> {
-    name: &'this str,
-    phrase: &'this str,
-    age: i8
+#[derive(Serialize, Queryable)]
+pub struct Person {
+    pub name: String,
+    pub phrase: String,
+    pub age: i32
 }
 
 /**
  * convert struct Person into HttpResponse by implementing Responder
  */
-impl <'this> Responder for Person<'this> {
+impl Responder for Person {
     // error type that can be emitted
     type Error = Error;
 
@@ -35,8 +37,8 @@ impl <'this> Responder for Person<'this> {
 /**
  * standard implementations for struct
  */
-impl <'this> Person<'this> {
-    pub fn new(name: &'this str, phrase: &'this str, age: i8) -> Self {
+impl Person {
+    pub fn new(name: String, phrase: String, age: i32) -> Self {
         Person {name, phrase, age}
     }
 }
